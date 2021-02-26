@@ -24,7 +24,7 @@ $(SHELL_NAME): shell.o
 dircreate.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/dircreate.c
 	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/dircreate.c
 
-build: $(OBJS)
+build: $(OBJS) $(SHELL_NAME)
 	mkdir $(BIN_DIR)
 	$(CC) -o $(BINS) $(BINS).o
 	mv $(BINS) $(BIN_DIR)

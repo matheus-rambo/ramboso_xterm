@@ -29,7 +29,7 @@ int main(int argc, char *argv[], char *envp[]) {
         exit(EXIT_FAILURE);
     }
     // Where the binaries are
-    const char *binaries = argv[1];
+    const char *binaries_path = argv[1];
 
     // Buffer to read from stdin
     char buffer[MAX_BUFFER_SIZE];
@@ -46,11 +46,14 @@ int main(int argc, char *argv[], char *envp[]) {
         if(pid == 0) {
             // child 
 
-        // Count how many args are there
-        unsigned int size = count_args(buffer);
+        // Count how many args are there, plus one to the last argument that must be null.
+        unsigned int size = count_args(buffer) + 1;
 
         // creates a temporary array to store
         char *args[size];
+
+        // puts null into the last index
+        args[size - 1] = NULL;
 
         // delimiter
         const char *delimiter = " ";
@@ -65,8 +68,12 @@ int main(int argc, char *argv[], char *envp[]) {
             args[index++] = token;
             token = strtok(NULL, delimiter);            
         }
-
-        execve(args[0], args, envp);
+        
+        char binary_file[strlen(binaries_path) + strlen(args[0]) + 1];
+        strcpy(binary_file, binaries_path);
+        strcat(binary_file, args[0]);
+        puts(binary_file);
+        execve(binary_file, args, envp);
         perror("Error with execve.\n");
         return EXIT_FAILURE;
 
