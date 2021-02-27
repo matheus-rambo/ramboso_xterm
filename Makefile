@@ -11,9 +11,10 @@ HEADERS_DIR := ./include
 SRC_DIR     := ./src
 BIN_DIR     := ./bin
 
-OBJS=createdir.o currentdir.o
-BINS=$(patsubst %.o,%,$(OBJS))
+# Object files
+OBJS=createdir.o currentdir.o showdir.o
 
+BINS=$(patsubst %.o,%,$(OBJS))
 
 shell.o: $(HEADERS_DIR)/shell.h shell.c 
 	$(CC) -I $(HEADERS_DIR) -c shell.c
@@ -27,6 +28,8 @@ createdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/createdir.c
 currentdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/currentdir.c
 	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/currentdir.c
 
+showdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/showdir.c
+	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/showdir.c
 
 build: clean $(OBJS) $(SHELL_NAME)
 	mkdir $(BIN_DIR)
