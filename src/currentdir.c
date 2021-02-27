@@ -67,5 +67,5 @@ void help(char *name) {
 }
 
 void version(char *name) {
-    printf("%s Version: %s.\n");
+    printf("%s Version: %s.\n", name, VERSION);
 }
