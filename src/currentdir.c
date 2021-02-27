@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-void help(char *name) {
+void help(char *name, FILE *file) {
     const char* help = 
     "Usage: %s [OPTION]...\n"
     "Gets the current directory.\n\n"
@@ -63,7 +63,7 @@ void help(char *name) {
     "   -a, --absolute The absolute name(path).\n"
     "   -h, --help     Display this help and exit.\n"
     "   -v, --version  Output the version information and exit.\n\n";
-    printf(help, name);
+    fprintf(file, help, name);
 }
 
 void version(char *name) {

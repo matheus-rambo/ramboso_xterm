@@ -43,13 +43,13 @@ int main(int argc, char *argv[]) {
                 strncpy(directory_name, optarg, MAX_BUFFER_SIZE - 2);
                 break;
             case 'h':
-                help(binary_name);
+                help(binary_name, stdout);
                 exit(EXIT_SUCCESS);
             case 'v':
                 version(binary_name);
                 exit(EXIT_SUCCESS);
             case ':':
-                help(binary_name);
+                help(binary_name, stderr);
                 exit(EXIT_FAILURE);
             case 'i':
                 interactive_flag = true;
@@ -59,10 +59,9 @@ int main(int argc, char *argv[]) {
     if(interactive_flag) {
         printf("Directory name: ");
         fgets(directory_name, MAX_BUFFER_SIZE - 2, stdin);
-    } else if (directory_name == NULL) {
-        puts("The directory name must be specified!");
-        exit(EXIT_FAILURE);
-    }
+    } 
+    
+
 
     size_t length = strlen(directory_name);
     if(directory_name[length - 1] == '\n') {
@@ -72,7 +71,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void help(char *name) {
+void help(char *name, FILE *file) {
     const char *help = 
     "Usage: %s [OPTION]...\n" 
     "Creates a new directory.\n\n" 
@@ -81,7 +80,7 @@ void help(char *name) {
     "  -i, --interactive Interactive mode.\n"
     "  -h, --help        Display this help and exit.\n"
     "  -v, --version     Output the version information and exit.\n\n";
-    printf(help, name);
+    fprintf(file, help, name);
 }
 
 static void create_directory(char *path) {

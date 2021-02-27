@@ -4,7 +4,7 @@
 /**
  * Displays the help
  */ 
-void help(char *);
+void help(char *, FILE *);
 
 /**
  * Displays the current version of the program.
