@@ -31,13 +31,13 @@ int main(int argc, char *argv[]) {
                 absolute_flag = true;
                 break;
             case 'h':
-                help(argv[0]);
+                help(argv[0], stdin);
                 return EXIT_SUCCESS;
             case 'v':
                 version(argv[0]);
                 return EXIT_SUCCESS;
             default:
-                help(argv[0]);
+                help(argv[0], stderr);
                 return EXIT_FAILURE;
         }
     }

@@ -26,8 +26,8 @@ static void create_directory(char *);
 int main(int argc, char *argv[]) {
 
     if(argc < 2) {
-        help(argv[0]);
-        exit(1);
+        help(argv[0], stderr);
+        exit(EXIT_FAILURE);
     }
 
     int option;
