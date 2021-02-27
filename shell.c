@@ -40,42 +40,42 @@ int main(int argc, char *argv[], char *envp[]) {
         fgets(buffer, MAX_BUFFER_SIZE, stdin);
     
         size_t length = strlen(buffer);
-        buffer[length - 1] = '\0'; // removes the extra space.
+        buffer[length - 1] = ' '; // removes the line feed and puts an extra space .
 
         const pid_t pid = create_child();
         if(pid == 0) {
             // child 
 
-        // Count how many args are there, plus one to the last argument that must be null.
-        unsigned int size = count_args(buffer) + 1;
+            // Count how many args are there, plus one to the last argument that must be null.
+            unsigned int size = count_args(buffer) + 1;
 
-        // creates a temporary array to store
-        char *args[size];
+            // creates a temporary array to store
+            char *args[size];
 
-        // puts null into the last index
-        args[size - 1] = NULL;
+            // puts null into the last index
+            args[size - 1] = NULL;
 
-        // delimiter
-        const char *delimiter = " ";
-        
-        // to manage the index to store the element
-        unsigned int index = 0; 
-        
-        // gets the element
-        char *token = strtok(buffer, delimiter);
+            // delimiter
+            const char *delimiter = " ";
+            
+            // to manage the index to store the element
+            unsigned int index = 0;
+            
+            // gets the element
+            char *token = strtok(buffer, delimiter);
 
-        while(token != NULL) {
-            args[index++] = token;
-            token = strtok(NULL, delimiter);            
-        }
-        
-        char binary_file[strlen(binaries_path) + strlen(args[0]) + 1];
-        strcpy(binary_file, binaries_path);
-        strcat(binary_file, args[0]);
-        puts(binary_file);
-        execve(binary_file, args, envp);
-        perror("Error with execve.\n");
-        return EXIT_FAILURE;
+            while(token != NULL) {
+                args[index++] = token;
+                token = strtok(NULL, delimiter);            
+            }
+            
+            char binary_file[strlen(binaries_path) + strlen(args[0]) + 1];
+            strcpy(binary_file, binaries_path);
+            strcat(binary_file, args[0]);
+            puts(binary_file);
+            execve(binary_file, args, envp);
+            perror("Error with execve.\n");
+            return EXIT_FAILURE;
 
         } else {
             // parent
