@@ -48,16 +48,13 @@ int main(int argc, char *argv[]) {
                 break;
             case 'h':
                 help(argv[0], stdout);
-                return EXIT_SUCCESS;
             case 'v':
                 version(argv[1]);
-                return EXIT_SUCCESS;
             case 'd':
                 {
                     int depth = atoi(optarg);
                     if(depth <= 0 ) {
                         help(argv[0], stderr);
-                        return EXIT_FAILURE;
                     }
                     max_depth = depth;
                 }
@@ -80,7 +77,6 @@ DIR * open_directory_stream(char *name) {
     if(directory == NULL) {
         fprintf(stderr, "Could not open the directory: %s.\n", name);
         handle_error();
-        exit(EXIT_FAILURE);
     }
     return directory;
 }
@@ -149,10 +145,12 @@ void help(char *name, FILE *file) {
     "Default values\n"
     "  -d = 1.\n\n";
     fprintf(file, help, name);
+    exit( file == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 void version(char *bin) {
     printf("%s Version: %s.\n", bin, VERSION);
+    exit(EXIT_SUCCESS);
 }
 
 void handle_error(void) {
@@ -169,4 +167,5 @@ void handle_error(void) {
             break;
     }
     fprintf(stderr, message);
+    exit(EXIT_FAILURE);
 }

@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
 
     if(argc < 2) {
         help(argv[0], stderr);
-        exit(EXIT_FAILURE);
     }
 
     int option;
@@ -44,15 +43,13 @@ int main(int argc, char *argv[]) {
                 break;
             case 'h':
                 help(binary_name, stdout);
-                exit(EXIT_SUCCESS);
             case 'v':
                 version(binary_name);
-                exit(EXIT_SUCCESS);
             case ':':
                 help(binary_name, stderr);
-                exit(EXIT_FAILURE);
             case 'i':
                 interactive_flag = true;
+                break;
         }
     } 
 
@@ -61,8 +58,6 @@ int main(int argc, char *argv[]) {
         fgets(directory_name, MAX_BUFFER_SIZE - 2, stdin);
     } 
     
-
-
     size_t length = strlen(directory_name);
     if(directory_name[length - 1] == '\n') {
         directory_name[length - 1] = '\0';
@@ -81,6 +76,7 @@ void help(char *name, FILE *file) {
     "  -h, --help        Display this help and exit.\n"
     "  -v, --version     Output the version information and exit.\n\n";
     fprintf(file, help, name);
+    exit( file == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
 static void create_directory(char *path) {
@@ -93,4 +89,5 @@ static void create_directory(char *path) {
 
 void version(char *bin) {
     printf("%s Version: %s.\n", bin, VERSION);
+    exit(EXIT_SUCCESS);
 }

@@ -32,13 +32,10 @@ int main(int argc, char *argv[]) {
                 break;
             case 'h':
                 help(argv[0], stdin);
-                return EXIT_SUCCESS;
             case 'v':
                 version(argv[0]);
-                return EXIT_SUCCESS;
             default:
                 help(argv[0], stderr);
-                return EXIT_FAILURE;
         }
     }
     
@@ -64,8 +61,11 @@ void help(char *name, FILE *file) {
     "   -h, --help     Display this help and exit.\n"
     "   -v, --version  Output the version information and exit.\n\n";
     fprintf(file, help, name);
+    exit( file == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
+
 }
 
 void version(char *name) {
     printf("%s Version: %s.\n", name, VERSION);
+    exit(EXIT_SUCCESS);
 }
