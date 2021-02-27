@@ -11,7 +11,7 @@ HEADERS_DIR := ./include
 SRC_DIR     := ./src
 BIN_DIR     := ./bin
 
-OBJS=dircreate.o
+OBJS=createdir.o currentdir.o
 BINS=$(patsubst %.o,%,$(OBJS))
 
 
@@ -21,18 +21,24 @@ shell.o: $(HEADERS_DIR)/shell.h shell.c
 $(SHELL_NAME): shell.o
 	$(CC) -o $(SHELL_NAME) shell.o
 
-dircreate.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/dircreate.c
-	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/dircreate.c
+createdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/createdir.c
+	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/createdir.c
 
-build: $(OBJS) $(SHELL_NAME)
+currentdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/currentdir.c
+	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/currentdir.c
+
+
+build: clean $(OBJS) $(SHELL_NAME)
 	mkdir $(BIN_DIR)
-	$(CC) -o $(BINS) $(BINS).o
+	$(foreach bin, $(BINS), $(CC) -o $(bin) $(bin).o;)
 	mv $(BINS) $(BIN_DIR)
 
-.PHONY: clean
+.PHONY: clean run
 
 clean:
 	rm -Rf $(BIN_DIR) *.o $(SHELL_NAME) *.out 
 
+run: 
+	./$(SHELL_NAME) ./bin/
 
 	

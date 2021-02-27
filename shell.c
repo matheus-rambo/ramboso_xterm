@@ -72,7 +72,6 @@ int main(int argc, char *argv[], char *envp[]) {
             char binary_file[strlen(binaries_path) + strlen(args[0]) + 1];
             strcpy(binary_file, binaries_path);
             strcat(binary_file, args[0]);
-            puts(binary_file);
             execve(binary_file, args, envp);
             perror("Error with execve.\n");
             return EXIT_FAILURE;
