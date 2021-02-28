@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
                 absolute_flag = true;
                 break;
             case 'h':
-                help(argv[0], stdin);
+                help(argv[0], stdout);
             case 'v':
                 version(argv[0]);
             default:
@@ -42,13 +42,18 @@ int main(int argc, char *argv[]) {
     char *pdw = getcwd(NULL, MAX_BUFFER_SIZE);
     if(!absolute_flag) {
         char *delimiter = "/";
+        char *to_free = pdw;
         char *dir = strtok(pdw, delimiter);
         while(dir != NULL) {
             pdw = dir;
             dir = strtok(NULL, delimiter);
         }
+        free(to_free);
+        puts(pdw);
+    } else {
+        puts(pdw);
+        free(pdw);
     }
-    puts(pdw);
     return EXIT_SUCCESS;
 }
 
