@@ -12,7 +12,6 @@
 #define SHELL "ramboso_xterm-$ "
 
 static char binaries_path[50];
-static char *environment_variables[1] = {NULL};
 
 pid_t create_child(void) {
     const pid_t pid = fork();
@@ -76,7 +75,7 @@ void handle_command_line(char *input[]) {
         char binary_file[strlen(binaries_path) + strlen(input[0]) + 1];
         strcpy(binary_file, binaries_path);
         strcat(binary_file, input[0]);
-        execve(binary_file, input, environment_variables);
+        execvp(binary_file, input);
         perror("Error with execve.\n");
         exit(EXIT_FAILURE);
 
