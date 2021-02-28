@@ -3,3 +3,5 @@ ramboso_xterm
 bin/*
 bin
 *.out
+build
+build/*
