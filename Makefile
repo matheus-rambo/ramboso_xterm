@@ -9,7 +9,8 @@ SHELL_NAME=ramboso_xterm
 
 HEADERS_DIR := ./include
 SRC_DIR     := ./src
-BIN_DIR     := ./bin
+BUILD_DIR   := ./build
+BIN_DIR     := $(BUILD_DIR)/bin
 
 # Object files
 OBJS=createdir.o currentdir.o showdir.o
@@ -17,31 +18,33 @@ OBJS=createdir.o currentdir.o showdir.o
 BINS=$(patsubst %.o,%,$(OBJS))
 
 shell.o: $(HEADERS_DIR)/shell.h shell.c 
-	$(CC) -I $(HEADERS_DIR) -c shell.c
+	$(CC) -I $(HEADERS_DIR) -c -o $(BUILD_DIR)/shell.o shell.c
 
 $(SHELL_NAME): shell.o
-	$(CC) -o $(SHELL_NAME) shell.o
+	$(CC) -o  $(BUILD_DIR)/$(SHELL_NAME) $(BUILD_DIR)/shell.o
 
 createdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/createdir.c
-	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/createdir.c
+	$(CC) -I $(HEADERS_DIR) -c -o $(BUILD_DIR)/createdir.o $(SRC_DIR)/createdir.c
 
 currentdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/currentdir.c
-	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/currentdir.c
+	$(CC) -I $(HEADERS_DIR) -c -o $(BUILD_DIR)/currentdir.o $(SRC_DIR)/currentdir.c
 
 showdir.o: $(HEADERS_DIR)/command.h $(SRC_DIR)/showdir.c
-	$(CC) -I $(HEADERS_DIR) -c $(SRC_DIR)/showdir.c
+	$(CC) -I $(HEADERS_DIR) -c -o $(BUILD_DIR)/showdir.o $(SRC_DIR)/showdir.c
 
-build: clean $(OBJS) $(SHELL_NAME)
-	mkdir $(BIN_DIR)
-	$(foreach bin, $(BINS), $(CC) -o $(bin) $(bin).o;)
-	mv $(BINS) $(BIN_DIR)
+install: $(OBJS) $(SHELL_NAME)
+	$(foreach bin, $(BINS), $(CC) -o $(BIN_DIR)/$(bin) $(BUILD_DIR)/$(bin).o;)
+
+build: clean
+	mkdir -p $(BIN_DIR)
 
 .PHONY: clean run
 
 clean:
-	rm -Rf $(BIN_DIR) *.o $(SHELL_NAME) *.out 
+	rm -Rf $(BUILD_DIR) 2>>/dev/null
 
-run: 
-	./$(SHELL_NAME) ./bin/
+run:
+	$(BUILD_DIR)/./$(SHELL_NAME) $(BIN_DIR)/
+
 
 	
