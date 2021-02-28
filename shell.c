@@ -90,7 +90,9 @@ int main(int argc, char *argv[], char *envp[]) {
 unsigned int count_args(char *arg) {
     unsigned int size = 0;
     while(*arg != '\0') {
-        if(*arg++ == ' ') size++;
+        // Must not count if the previous character is a whitespace too
+        if(*arg == ' ' && *(arg - 1) != ' ') size++;
+        arg++;
     }
     return size;
 }
