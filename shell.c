@@ -37,8 +37,8 @@ int main(int argc, char *argv[], char *envp[]) {
     while(1) {
     
         printf(SHELL);
+        fflush(stdin);
         fgets(buffer, MAX_BUFFER_SIZE, stdin);
-    
         size_t length = strlen(buffer);
         buffer[length - 1] = ' '; // removes the line feed and puts an extra space .
 
