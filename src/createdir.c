@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <getopt.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -57,26 +57,26 @@ int main(int argc, char *argv[]) {
                     break;
                 }
         }
-    } 
-    mode_t mode = (owner | group | others);
-
-    if(optind == argc) {
-        fprintf(stderr, "The directory is required, and must be the last argument!\n");
-        exit(EXIT_FAILURE);
     }
+   mode_t mode = ( S_IFDIR | owner | group | others );
 
-    for(int index = optind; index < argc; index++) {
-        create_directory(argv[index], mode);
-    }
-    
+   if(optind == argc) {
+      fprintf(stderr, "The directory is required, and must be the last argument!\n");
+      exit(EXIT_FAILURE);
+   }
+
+   for(int index = optind; index < argc; index++) {
+      create_directory(argv[index], mode);
+   }
+
 
     return 0;
 }
 
 void help(char *name, FILE *file) {
-    const char *help = 
-    "Usage: %s [-o <int value> ] [-g <int value> ] [-o <int value> ] [-vh ] directory ...\n" 
-    "Creates a new directory.\n\n" 
+    const char *help =
+    "Usage: %s [-o <int value> ] [-g <int value> ] [-o <int value> ] [-vh ] directory ...\n"
+    "Creates a new directory.\n\n"
     "Options\n"
     "  -o, --owner   Directory owner permissions. Default is: 7. \n"
     "  -g, --group   Users of the same group permissions. Default is: 5.\n"
