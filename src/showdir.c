@@ -20,11 +20,9 @@ void show_directory_entries(char *, unsigned int, unsigned int, bool);
 void handle_error(void);
 void get_entry_access(char *, char [4]);
 
-
-const char *short_options = "n:hvad:";
+const char *short_options = "d:hva";
 struct option long_options[] = {
     { "help",      no_argument,       NULL, 'h' },
-    { "name",      required_argument, NULL, 'n' },
     { "version",   no_argument,       NULL, 'v' },
     { "max-depth", required_argument, NULL, 'd' },
     { "access",    no_argument,       NULL, 'a' },
@@ -32,23 +30,16 @@ struct option long_options[] = {
 };
 
 
+
+
 int main(int argc, char *argv[]) {
 
-    if(argc < 2) {
-        help(argv[0], stderr);
-    }
-
     int option;
-    char directory_name[MAX_BUFFER_SIZE];
-    memset(directory_name, 0, MAX_BUFFER_SIZE);
     unsigned int max_depth = 0;
     bool access_flag = false;
 
     while ( ( option = getopt_long(argc, argv, short_options, long_options, NULL)) != -1 ) {
         switch (option) {
-            case 'n':
-                strncpy(directory_name, optarg, MAX_BUFFER_SIZE);
-                break;
             case 'h':
                 help(argv[0], stdout);
             case 'v':
@@ -68,12 +59,20 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if(strlen(directory_name) == 0) {
-        fprintf(stderr, "The filename must be provided!\n");
-        return EXIT_FAILURE;
+    /**
+     * The directory was not specified, so, we will use the 
+     * current directory.
+     */ 
+    if(optind == argc) {
+        char current_dir[MAX_BUFFER_SIZE];
+        getcwd(current_dir, MAX_BUFFER_SIZE);
+        show_directory_entries(current_dir, 0, max_depth, access_flag);
     }
 
-    show_directory_entries(directory_name, 0, max_depth, access_flag);
+    for(int index = optind; index < argc; index++) {
+        show_directory_entries(argv[index], 0, max_depth, access_flag);
+    }
+    
     return 0;
 }
 
@@ -147,10 +146,9 @@ void show_directory_entries(char *directory_name, unsigned int depth, unsigned i
 
 void help(char *name, FILE *file) {
     const char *help = 
-    "Usage: %s [OPTION]...\n" 
+    "Usage: %s [-d <depth> ] [-hva ] directory ...\n" 
     "Shows the directory entries.\n\n" 
     "Options\n"
-    "  -n, --name      The directory name.\n"
     "  -d, --max-depth A non negative value indicating the maximum depth.\n"
     "  -h, --help      Display this help and exit.\n"
     "  -v, --version   Output the version information and exit.\n"  
@@ -165,29 +163,15 @@ void version(char *bin) {
 }
 
 void handle_error(void) {
-    char *message;
-    switch(errno) {
-        case EACCES:
-            message = "Permission denied!\n";
-            break;
-        case ENOENT:
-            message = "Directory does not exists!\n";
-            break;
-        default:
-            message = "Unknown error!\n";
-            break;
-    }
-    fprintf(stderr, "%s\n", message);
+    fprintf(stderr, "Aborted due to an error. Error Number: %d. See errno-base.h to details!\n", errno);
     exit(EXIT_FAILURE);
 }
 
 void get_entry_access(char *entry_name, char buffer[4]) {
     struct stat entry_stat;
-    int error = stat(entry_name, &entry_stat);
-    if(error == -1) {
+    if(stat(entry_name, &entry_stat) == -1) {
         handle_error();
     }
-    // TODO: handle error
 
     // TODO: It can be better ...
     char permits = 0;
