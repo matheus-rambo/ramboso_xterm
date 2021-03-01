@@ -18,10 +18,6 @@ static struct option long_options[] = {
     { NULL,      0,                 NULL,  0 }
 };
 
-/* Executes the syscall */
-static void create_directory(char *, mode_t);
-static void handle_error(void);
-
 int main(int argc, char *argv[]) {
 
     int option;
@@ -75,19 +71,20 @@ int main(int argc, char *argv[]) {
 
 void help(char *name, FILE *file) {
     const char *help =
-    "Usage: %s [-o <int value> ] [-g <int value> ] [-o <int value> ] [-vh ] directory ...\n"
-    "Creates a new directory.\n\n"
-    "Options\n"
-    "  -o, --owner   Directory owner permissions. Default is: 7. \n"
-    "  -g, --group   Users of the same group permissions. Default is: 5.\n"
-    "  -t, --others  Others users permissions. Default is: 0.\n"
-    "  -h, --help    Display this help and exit.\n"
-    "  -v, --version Output the version information and exit.\n\n";
+    "\nUsage: %s [-o <mode> ] [-g <mode> ] [-t <mode> ] [-vh ] directory ...\n"
+    "Create the directory(ies), if they do not already exist.\n\n"
+    "Options:\n"
+    "Mandatory arguments to long options are mandatory for short options too.\n\n"
+    "  -o, --owner=MODE   Mode for the user.                      Default is: 7.\n"
+    "  -g, --group=MODE   Mode for users of the same group.       Default is: 5.\n"
+    "  -t, --others=MODE  Mode for others users.                  Default is: 0.\n"
+    "  -h, --help         Display this help and exit.\n"
+    "  -v, --version      Output the version information and exit.\n\n";
     fprintf(file, help, name, name, name);
     exit( file == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
 }
 
-static void create_directory(char *path, mode_t permissions) {
+void create_directory(char *path, mode_t permissions) {
     int syscall_status = mkdir(path, permissions);
     if(syscall_status != 0) {
         handle_error();
@@ -99,7 +96,7 @@ void version(char *bin) {
     exit(EXIT_SUCCESS);
 }
 
-static void handle_error(void) {
+void handle_error(void) {
     fprintf(stderr, "Aborted due to an error. Error Number: %d. See errno-base.h to details!\n", errno);
     exit(EXIT_FAILURE);
 }

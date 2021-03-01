@@ -11,6 +11,7 @@
  #define MAX_BUFFER_SIZE 100
 #endif
 
-
+void create_directory(char *, mode_t);
+void handle_error(void);
 
 #endif
