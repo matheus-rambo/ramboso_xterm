@@ -117,7 +117,7 @@ void show_directory_entries(char *directory_name, unsigned int depth, unsigned i
                     tab[index] = '-';
                 }
             } 
-            printf(tab);           
+            printf("%s", tab);           
         } 
 
         // +2 -> for the / and \0
@@ -177,7 +177,7 @@ void handle_error(void) {
             message = "Unknown error!\n";
             break;
     }
-    fprintf(stderr, message);
+    fprintf(stderr, "%s\n", message);
     exit(EXIT_FAILURE);
 }
 
