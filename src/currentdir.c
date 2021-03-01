@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
                 help(argv[0], stderr);
         }
     }
-    
+
     char *pdw = getcwd(NULL, MAX_BUFFER_SIZE);
     if(!absolute_flag) {
         char *delimiter = "/";
@@ -58,8 +58,8 @@ int main(int argc, char *argv[]) {
 }
 
 void help(char *name, FILE *file) {
-    const char* help = 
-    "Usage: %s [OPTION]...\n"
+    const char* help =
+    "Usage: %s [-ahv ]\n"
     "Gets the current directory.\n\n"
     "Options\n"
     "   -a, --absolute The absolute name(path).\n"
