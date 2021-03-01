@@ -1,5 +1,5 @@
-#ifndef __RAMBOSO_X_TERM__
-#define __RAMBOSO_X_TERM__
+#ifndef __RAMBOSO_X_TERM_SHELL_H__
+#define __RAMBOSO_X_TERM_SHELL_H__
 
 #include <unistd.h> /* To work with Syscalls */
 #include <stdbool.h> /* bool */
